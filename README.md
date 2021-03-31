@@ -1,4 +1,4 @@
-# Data Collector 📈📈📈
+# Data Collector 📈🪣
 
 ## Pipelines 🚀
 
