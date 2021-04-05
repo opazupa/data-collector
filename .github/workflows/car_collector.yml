@@ -17,15 +17,11 @@ defaults:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [14.x]
-        
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
+      
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
@@ -49,9 +45,8 @@ jobs:
     needs: build
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    environment:
-      name: PROD
-      url: ${{ steps.deploywebapp.outputs.webapp-url }}
+    # environment:
+    #   name: PROD
+    #   url: ${{ steps.deploywebapp.outputs.webapp-url }}
     steps:
-    - name: Download site package
-      run: echo "Not A PR"
+      - run: echo "Not A PR"
