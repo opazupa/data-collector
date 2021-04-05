@@ -23,7 +23,8 @@
 		"esbenp.prettier-vscode",
 		"amazonwebservices.aws-toolkit-vscode",
 		"kddejong.vscode-cfn-lint",
-		"rbbit.typescript-hero"
+		"rbbit.typescript-hero",
+		"oouo-diogo-perdigao.docthis"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.

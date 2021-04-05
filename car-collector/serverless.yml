@@ -1,0 +1,27 @@
+app: data-collector
+service: car-collector
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    HELLO: admin
+    MOI: ${env:MOI}
+
+functions:
+  hello:
+    handler: app/handler.hello
+    events:
+      - http:
+          path: /hello
+          method: get
+
+custom:
+  # Local development
+  serverless-offline:
+    httpPort: 4000
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-dotenv-plugin
+  - serverless-offline

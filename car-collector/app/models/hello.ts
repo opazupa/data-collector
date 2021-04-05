@@ -1,0 +1,1 @@
+export const Hello = (input: string): string => input.toUpperCase();
