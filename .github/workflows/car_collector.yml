@@ -11,6 +11,10 @@ on:
   pull_request:
     branches: [ master ]
 
+defaults:
+  run:
+    working-directory: car-collector
+
 jobs:
   build:
 
