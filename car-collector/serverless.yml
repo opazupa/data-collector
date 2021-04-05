@@ -15,6 +15,18 @@ functions:
       - http:
           path: /hello
           method: get
+  timed-hello:
+    handler: app/handler.getCars
+    events:
+      - schedule:
+          rate: cron(0 12 * * ? *)
+          enabled: false
+  get-s3:
+    handler: app/handler.getBucket
+    events:
+      - schedule:
+          rate: cron(0 12 * * ? *)
+          enabled: false
 
 custom:
   # Local development

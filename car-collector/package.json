@@ -3,6 +3,8 @@
   "description": "",
   "version": "0.1.0",
   "dependencies": {
+    "aws-sdk": "^2.879.0",
+    "axios": "^0.21.1",
     "dotenv": "^8.2.0"
   },
   "devDependencies": {
@@ -29,7 +31,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "local": "serverless offline",
-    "build": "SLS_DEBUG=* && serverless package",
+    "build": "serverless package",
     "deploy": "serverless deploy",
     "test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/*.test.ts --exit"
   }
