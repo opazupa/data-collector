@@ -29,6 +29,7 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "local": "serverless offline",
+    "build": "serverless package",
     "deploy": "serverless deploy",
     "test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/*.test.ts --exit"
   }
