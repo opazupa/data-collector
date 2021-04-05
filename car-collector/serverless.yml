@@ -1,6 +1,7 @@
 app: data-collector
 service: car-collector
 
+useDotenv: false
 provider:
   name: aws
   runtime: nodejs14.x
@@ -15,11 +16,6 @@ functions:
       - http:
           path: /hello
           method: get
-
-custom:
-  # Local development
-  serverless-offline:
-    httpPort: 4000
 
 plugins:
   - serverless-plugin-typescript

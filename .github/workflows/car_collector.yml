@@ -1,6 +1,4 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
+# Car collector CI/CD workflow, triggered form car-collector folder
 name: Car Collector CI/CD
 
 on:
@@ -16,6 +14,7 @@ defaults:
     working-directory: car-collector
 
 jobs:
+  # Build etc other PR feedbacks.
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -41,6 +40,7 @@ jobs:
     - name: Run unit tests
       run: npm test
 
+  # Deployment (non PR)
   deploy:
     needs: build
     if: github.event_name != 'pull_request'

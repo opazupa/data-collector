@@ -11,11 +11,11 @@ export const hello: Handler = (event: unknown) => {
         input: event,
       },
       null,
-      2
+      2,
     ),
   };
 
   return new Promise((resolve) => {
-    resolve(response)
-  })
-}
+    resolve(response);
+  });
+};
