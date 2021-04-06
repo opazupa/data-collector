@@ -6,7 +6,7 @@ provider:
   runtime: nodejs14.x
   environment:
     HELLO: admin
-    MOI: ${env:MOI}
+    MOI: ${env:AWS_S3_CAR_BUCKET}
 
 functions:
   hello:

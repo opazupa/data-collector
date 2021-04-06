@@ -70,7 +70,13 @@ export const getBucket = (): void => {
   AWS.config.update({ region: 'REGION' });
 
   // Create S3 service object
-  const s3 = new AWS.S3({ apiVersion: '2006-03-01', endpoint: 'http://s3:9000' ,accessKeyId: 'test', secretAccessKey: 'testtest' });
+  const s3 = new AWS.S3({
+    apiVersion: '2006-03-01',
+    region: 'us-east-1',
+    endpoint: 'http://s3:9000',
+    accessKeyId: 'test',
+    secretAccessKey: 'supersecret',
+  });
 
   // Call S3 to list the buckets
   s3.listBuckets(function (err, data) {

@@ -6,7 +6,6 @@ services:
       dockerfile: Dockerfile
       args:
         VARIANT: 14
-
     volumes:
         - ..:/workspace:cached
 
@@ -14,9 +13,6 @@ services:
     command: sleep infinity
     networks:
       - car-collector-network
-    # Runs app on the same network as the s3
-    # network_mode: service:s3
-
 
   s3:
     image: minio/minio:edge
@@ -27,12 +23,10 @@ services:
         - car-collector-network
     environment:
         - MINIO_ACCESS_KEY=test
-        - MINIO_SECRET_KEY=testtest
+        - MINIO_SECRET_KEY=supersecret
     volumes:
         - ./data/s3:/home/s3/
-  # This service creates an image bucket in the local minio for development 
-  # Since the `depends_on` isn't enough to wait for the minio service to be
-  # completely up, the entrypoint repeatedly tries to connect
+
   car-collector-bucket:
     image: minio/mc
     depends_on:
@@ -41,7 +35,7 @@ services:
         - car-collector-network
     entrypoint: >
         /bin/sh -c "
-        until /usr/bin/mc config host add s3 http://s3:9000 test testtest;
+        until /usr/bin/mc config host add s3 http://s3:9000 test secret;
         do echo 'Minio is unavailable - sleeping'; 
         sleep 1; 
         done;
