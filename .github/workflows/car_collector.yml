@@ -4,6 +4,7 @@
 name: Car Collector CI/CD
 
 on:
+  workflow_dispatch:
   push:
     branches: [ master ]
     paths:
@@ -49,4 +50,5 @@ jobs:
     #   name: PROD
     #   url: ${{ steps.deploywebapp.outputs.webapp-url }}
     steps:
+      - uses: actions/checkout@v2
       - run: pwd
