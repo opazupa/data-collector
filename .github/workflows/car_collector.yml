@@ -46,8 +46,8 @@ jobs:
     needs: build
     if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
-    # environment:
-    #   name: PROD
+    environment:
+      name: Prod
     #   url: ${{ steps.deploywebapp.outputs.webapp-url }}
     steps:
       - run: pwd

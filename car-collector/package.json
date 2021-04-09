@@ -2,7 +2,13 @@
   "name": "car-collector",
   "description": "",
   "version": "0.1.0",
+  "author": "Olli Saarinen",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/opazupa/data-collector"
+  },
   "dependencies": {
+    "@sentry/serverless": "^6.2.5",
     "aws-sdk": "^2.879.0",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0"
@@ -34,6 +40,7 @@
     "invoke": "serverless invoke local --function",
     "build": "serverless package",
     "deploy": "serverless deploy",
-    "test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/*.test.ts --exit"
+    "unit-test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/unit/*.test.ts --exit",
+    "integration-test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/integration/*.test.ts --exit"
   }
 }

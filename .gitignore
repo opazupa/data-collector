@@ -103,5 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-# dev files
+# Local dev volumes
 .devcontainer/data

@@ -1,12 +1,11 @@
 app: data-collector
 service: car-collector
+disabledDeprecations:
+  - "*" # To disable all deprecation messages
 
 provider:
   name: aws
   runtime: nodejs14.x
-  environment:
-    HELLO: admin
-    MOI: ${env:AWS_S3_CAR_BUCKET}
 
 functions:
   hello:
@@ -15,13 +14,13 @@ functions:
       - http:
           path: /hello
           method: get
-  timed-hello:
+  cars:
     handler: app/handler.getCars
     events:
       - schedule:
           rate: cron(0 12 * * ? *)
           enabled: false
-  get-s3:
+  buckets:
     handler: app/handler.getBucket
     events:
       - schedule:
