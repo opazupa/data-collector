@@ -15,6 +15,7 @@ interface IConfiguration {
   };
   carAPI: {
     url: string;
+    auth_url: string;
     user: string;
     secret: string;
   };
@@ -41,6 +42,7 @@ export const Configuration: IConfiguration = {
     carBucket: process.env.AWS_S3_CAR_BUCKET as string,
   },
   carAPI: {
+    auth_url: process.env.NETTIAUTO_API_AUTH_URL as string,
     url: process.env.NETTIAUTO_API_URL as string,
     user: process.env.NETTIAUTO_API_USER as string,
     secret: process.env.NETTIAUTO_API_SECRET as string,

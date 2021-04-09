@@ -11,12 +11,15 @@
     "@sentry/serverless": "^6.2.5",
     "aws-sdk": "^2.879.0",
     "axios": "^0.21.1",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "luxon": "^1.26.0",
+    "qs": "^6.10.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.61",
     "@types/chai": "^4.2.16",
     "@types/lambda-tester": "^3.6.1",
+    "@types/luxon": "^1.26.3",
     "@types/mocha": "^8.2.2",
     "@types/sinon": "^9.0.11",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
