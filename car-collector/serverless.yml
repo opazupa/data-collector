@@ -35,6 +35,7 @@ package:
 functions:
   new-cars:
     handler: app/handler.saveNewCars
+    timeout: 500
     events:
       - schedule:
           rate: cron(0 4 * * ? *)
