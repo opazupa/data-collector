@@ -1,11 +1,14 @@
 import * as dotenv from 'dotenv';
 
+const DEVELOPMENT = 'dev';
+
 /**
  * Env configuration interface
  *
  * @interface IConfiguration
  */
 interface IConfiguration {
+  isDev: () => boolean;
   aws: {
     region: string;
     url: string;
@@ -34,6 +37,7 @@ dotenv.config();
  * @interface IConfiguration
  */
 export const Configuration: IConfiguration = {
+  isDev: () => (process.env.APP_ENV as string) === DEVELOPMENT,
   aws: {
     url: process.env.AWS_S3_URL as string,
     region: process.env.AWS_S3_REGION as string,

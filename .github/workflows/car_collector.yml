@@ -60,7 +60,7 @@ jobs:
       - name: Serverless AWS authentication
         run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
 
-      - name: Create env file
+      - name: Create env file for secrets
         run: |
           touch .env
           echo NETTIAUTO_API_SECRET=${{ secrets.NETTIAUTO_API_SECRET }} >> .env
@@ -68,8 +68,8 @@ jobs:
           echo SENTRY_DSN=${{ secrets.SENTRY_DSN }} >> .env
           cat .env
 
-      - name: Install NPM dependencies
+      - name: Install deps
         run: npm install
 
-      - name: Deploy Application
+      - name: Deploy serverless stack
         run: sls deploy --stage prod

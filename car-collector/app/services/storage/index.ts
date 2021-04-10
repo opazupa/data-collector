@@ -6,12 +6,12 @@ import { Configuration } from '../../configuration';
 import { toCar } from '../../models';
 import { CarAd } from '../cars';
 
-const { aws } = Configuration;
+const { aws, isDev } = Configuration;
 
 // Create S3 service object
 const s3 = new AWS.S3({
   region: aws.region,
-  endpoint: `${aws.url}/${aws.carBucket}`,
+  endpoint: `${aws.url}${isDev() ? `/${aws.carBucket}` : ''}`, // Minion dev requirement
   accessKeyId: aws.accessKey,
   secretAccessKey: aws.accessSecret,
   s3BucketEndpoint: true,
