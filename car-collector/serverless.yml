@@ -6,6 +6,21 @@ disabledDeprecations:
 provider:
   name: aws
   runtime: nodejs14.x
+  region: ${env:AWS_S3_REGION}
+  stackTags:
+    Owner: Olli Saarinen
+    Project: car-collector-${opt:stage}
+
+  iamrolestatements:
+    - Effect: 'Allow'
+      Action:
+        - 's3:PutObject'
+      Resource:
+        Fn::Join:
+          - ''
+          - - 'arn:aws:s3:::'
+            - Ref: CarBucket
+            - '/*'
 
 functions:
   new-cars:
@@ -24,3 +39,13 @@ plugins:
   - serverless-plugin-typescript
   - serverless-dotenv-plugin
   - serverless-offline
+
+resources:
+  Conditions:
+    IsProd: !Equals ["${opt:stage}", "prod"]
+  Resources:
+    CarBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: !Sub ${opt:stage}-car-bucket
+  
