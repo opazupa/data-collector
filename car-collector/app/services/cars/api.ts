@@ -8,6 +8,8 @@ import { CarAd } from './models';
 const PAGE_SIZE = 100;
 const BASE_CAR_API = 'rest/car';
 const BASE_CAR_QUERY = 'isPriced=true&vatDeduct=true&taxFree';
+const COUNT_API = `${BASE_CAR_API}/search-count`;
+const SEARCH_API = `${BASE_CAR_API}/search`;
 
 const { carAPI } = Configuration;
 
@@ -34,8 +36,8 @@ export const getCars = async ({ fromDate }: IGetCarsParams): Promise<CarAd[]> =>
 
   const count = await getCount({ fromDate });
   const pages = Math.ceil(count / PAGE_SIZE);
-
   console.log(`${pages} pages of new cars (${count}) to be saved.`);
+  if (!count) return [];
 
   // Get cars from all pages in parallel
   const searchPromises = [];
@@ -59,9 +61,7 @@ interface ISearchParams extends IGetCarsParams {
 const searchCarAds = async ({ fromDate, page }: ISearchParams) => {
   const carAds = await axios
     .get<CarAd[]>(
-      `${
-        carAPI.url
-      }/${BASE_CAR_API}/search?${BASE_CAR_QUERY}&page=${page}&rows=${PAGE_SIZE}&sortBy=dateCreated&sortOrder=asc${
+      `${carAPI.url}/${SEARCH_API}?${BASE_CAR_QUERY}&page=${page}&rows=${PAGE_SIZE}&sortBy=dateCreated&sortOrder=asc${
         fromDate ? '&dateCreatedFrom=' + fromDate.toISO() : ''
       }`,
     )
@@ -75,9 +75,7 @@ const searchCarAds = async ({ fromDate, page }: ISearchParams) => {
  */
 const getCount = async ({ fromDate }: IGetCarsParams): Promise<number> => {
   return await axios
-    .get<ICountResponse>(
-      `${carAPI.url}/${BASE_CAR_API}/search-count?${BASE_CAR_QUERY}&dateCreatedFrom=${fromDate.toISO()}`,
-    )
+    .get<ICountResponse>(`${carAPI.url}/${COUNT_API}?${BASE_CAR_QUERY}&dateCreatedFrom=${fromDate.toISO()}`)
     .then((x) => x.data.total);
 };
 

@@ -3,25 +3,59 @@ import MockAdapter from 'axios-mock-adapter';
 import { expect } from 'chai';
 import { DateTime } from 'luxon';
 
-import { getCars, IAuthResponse } from '../../app/services/cars';
+import { CarAd, getCars, IAuthResponse, ICountResponse } from '../../app/services/cars';
 
 const mock = new MockAdapter(axios);
 
-describe('Car collector handler', () => {
+const TESLA = { model: { en: 'Tesla' }, price: 100000, registerNumber: 'XXX-345' };
+const OPEL = { model: { en: 'Opel' }, price: 4000, registerNumber: 'OPO-341' };
+
+describe('Car api service', () => {
   beforeEach(() => {
     mock.reset();
-    mock.onPost(/auth/).reply(200, { access_token: 'testtoken' } as IAuthResponse);
+    // Mock auth Success
+    mock.onPost(/auth/).reply(200, { access_token: 'test-token' } as IAuthResponse);
   });
 
-  it('Save new cars from yesterday', async () => {
-    // const CARS = [
-    //   { model: 'Tesla', registerNumber: 'XXX-345' },
-    //   { model: 'Opel', registerNumber: 'OPO-345' },
-    // ] as Car[];
+  it('Get zero pages of cars', async () => {
+    const amount = 0;
+    mock.onGet(/search-count?/).replyOnce(200, { total: amount } as ICountResponse);
 
-    // carMock.expects('getCars').once().returns(CARS);
-    // storageMock.expects('save').once().withArgs(CARS);
     const cars = await getCars({ fromDate: DateTime.now() });
     expect(cars).be.empty;
+    expect(cars).length(0);
+  });
+
+  it('Get 1 page of cars', async () => {
+    const amount = 1;
+    mock.onGet(/search-count?/).replyOnce(200, { total: amount } as ICountResponse);
+    mock.onGet(/search?/).reply(200, [TESLA, OPEL] as CarAd[]);
+
+    const cars = await getCars({ fromDate: DateTime.now() });
+    expect(cars).not.be.empty;
+    expect(cars).length(2, 'Page calculated with 100, but the mock returns 2 cars per page');
+    expect(cars).to.have.deep.members([TESLA, OPEL]);
+  });
+
+  it('Get 2 pages of cars', async () => {
+    const amount = 199;
+    mock.onGet(/search-count?/).replyOnce(200, { total: amount } as ICountResponse);
+    mock.onGet(/search?/).reply(200, [TESLA, OPEL] as CarAd[]);
+
+    const cars = await getCars({ fromDate: DateTime.now() });
+    expect(cars).not.be.empty;
+    expect(cars).length(4, 'Page calculated with 100, but the mock returns 2 cars per page');
+    expect(cars).to.deep.include.members([TESLA, OPEL]);
+  });
+
+  it('Get 11 pages of cars', async () => {
+    const amount = 1031;
+    mock.onGet(/search-count?/).replyOnce(200, { total: amount } as ICountResponse);
+    mock.onGet(/search?/).reply(200, [TESLA, OPEL] as CarAd[]);
+
+    const cars = await getCars({ fromDate: DateTime.now() });
+    expect(cars).not.be.empty;
+    expect(cars).length(22, 'Page calculated with 100, but the mock returns 2 cars per page');
+    expect(cars).to.deep.include.members([TESLA, OPEL]);
   });
 });

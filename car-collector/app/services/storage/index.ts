@@ -36,5 +36,5 @@ export const save = async (data: CarAd[], dateInfo: DateTime = DateTime.utc()) =
   await s3
     .putObject(params)
     .promise()
-    .then(() => console.log(`Uploaded to ${partition}/${fileName} 🚀`));
+    .then(() => console.log(`Uploaded ${partition}/${fileName} to ${aws.carBucket} 🚀`));
 };

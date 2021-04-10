@@ -1,16 +1,16 @@
 import lambdaTester from 'lambda-tester';
 import sinon from 'sinon';
 
-import { saveNewCars } from '../app/handler';
-import { Car } from '../app/models';
-import * as carAPI from '../app/services/cars/api';
-import * as storage from '../app/services/storage';
+import { saveNewCars } from '../../app/handler';
+import { Car } from '../../app/models';
+import * as carAPI from '../../app/services/cars/api';
+import * as storage from '../../app/services/storage';
 
 describe('Car collector handler', () => {
   it('Save new cars from yesterday', async () => {
     const CARS = [
       { model: 'Tesla', registerNumber: 'XXX-345' },
-      { model: 'Opel', registerNumber: 'OPO-345' },
+      { model: 'Opel', registerNumber: 'OPO-341' },
     ] as Car[];
     const carMock = sinon.mock(carAPI);
     const storageMock = sinon.mock(storage);
