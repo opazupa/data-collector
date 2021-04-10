@@ -6,6 +6,7 @@ disabledDeprecations:
 provider:
   name: aws
   runtime: nodejs14.x
+  stage: ${opt:stage, 'dev'}
   region: ${env:AWS_S3_REGION}
   stackTags:
     Owner: Olli Saarinen
