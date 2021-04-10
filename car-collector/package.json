@@ -13,6 +13,7 @@
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "luxon": "^1.26.0",
+    "node-gzip": "^1.1.2",
     "qs": "^6.10.1"
   },
   "devDependencies": {
@@ -21,6 +22,8 @@
     "@types/lambda-tester": "^3.6.1",
     "@types/luxon": "^1.26.3",
     "@types/mocha": "^8.2.2",
+    "@types/node": "^14.14.37",
+    "@types/node-gzip": "^1.1.0",
     "@types/sinon": "^9.0.11",
     "@typescript-eslint/eslint-plugin": "^4.20.0",
     "@typescript-eslint/parser": "^4.20.0",
@@ -34,6 +37,7 @@
     "serverless-offline": "^6.5.0",
     "serverless-plugin-typescript": "^1.1.9",
     "sinon": "^10.0.0",
+    "ts-auto-mock": "^3.1.2",
     "ts-node": "^9.1.1",
     "typescript": "^3.9.7"
   },
@@ -43,7 +47,6 @@
     "invoke": "serverless invoke local --function",
     "build": "serverless package",
     "deploy": "serverless deploy",
-    "unit-test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/unit/*.test.ts --exit",
-    "integration-test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/integration/*.test.ts --exit"
+    "test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/**/*.test.ts --exit"
   }
 }
