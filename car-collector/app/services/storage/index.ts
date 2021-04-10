@@ -4,6 +4,8 @@ import { DateTime } from 'luxon';
 import { gzip } from 'node-gzip';
 
 import { Configuration } from '../../configuration';
+import { toCar } from '../../models';
+import { CarAd } from '../cars';
 
 const { aws } = Configuration;
 const TEMP_FILE = 'temp_upload.json';
@@ -17,9 +19,9 @@ const s3 = new AWS.S3({
   s3BucketEndpoint: true,
 });
 
-export const save = async (data: unknown[], dateInfo: DateTime = DateTime.utc()) => {
+export const save = async (data: CarAd[], dateInfo: DateTime = DateTime.utc()) => {
   // Write to json line
-  fs.writeFileSync(TEMP_FILE, data.map((d) => JSON.stringify(d)).join('\n'), { flag: 'w' });
+  fs.writeFileSync(TEMP_FILE, data.map((d) => JSON.stringify(toCar(d))).join('\n'), { flag: 'w' });
 
   const partition = `year=${dateInfo.year}/month=${dateInfo.month}/week=${dateInfo.weekNumber}`;
   const fileName = `${dateInfo.weekdayLong}.json.gz`;

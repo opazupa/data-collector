@@ -8,17 +8,11 @@ provider:
   runtime: nodejs14.x
 
 functions:
-  hello:
-    handler: app/handler.hello
-    events:
-      - http:
-          path: /hello
-          method: get
   new-cars:
     handler: app/handler.saveNewCars
     events:
       - schedule:
-          rate: cron(0 4 * * *)
+          rate: cron(0 4 * * ? *)
           enabled: false
 
 custom:
