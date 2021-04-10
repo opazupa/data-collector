@@ -11,10 +11,10 @@ provider:
   stackTags:
     Owner: Olli Saarinen
     Project: car-collector-${opt:stage}
-  env:
-    AWS_S3_URL: !Join ['', ['https://', !GetAtt [CarBucket, DomainName]]]
+  environment:
+    AWS_S3_URL: !Join ['', ['https://', Fn::GetAtt [CarBucket, DomainName]]]
     AWS_S3_ACCESS_KEY: !Ref S3UserAccessKey
-    AWS_S3_ACCESS_SECRET: Fn::GetAtt: ["S3UserAccessKey", "SecretAccessKey"]
+    AWS_S3_ACCESS_SECRET: Fn::GetAtt ["S3UserAccessKey", "SecretAccessKey"]
     AWS_S3_CAR_BUCKET: !Ref CarBucket
   iamrolestatements:
     - Effect: 'Allow'
