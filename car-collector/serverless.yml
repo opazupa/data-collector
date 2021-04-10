@@ -12,20 +12,22 @@ provider:
     Owner: Olli Saarinen
     Project: car-collector-${opt:stage}
   environment:
-    AWS_S3_URL: Fn::Join ['', ['https://', Fn::GetAtt [CarBucket, DomainName]]]
+    AWS_S3_URL: !Join ['', ['https://', !GetAtt ["CarBucket", "DomainName"]]]
     AWS_S3_ACCESS_KEY: !Ref S3UserAccessKey
-    AWS_S3_ACCESS_SECRET: Fn::GetAtt ["S3UserAccessKey", "SecretAccessKey"]
+    AWS_S3_ACCESS_SECRET: !GetAtt ["S3UserAccessKey", "SecretAccessKey"]
     AWS_S3_CAR_BUCKET: !Ref CarBucket
-  iamrolestatements:
-    - Effect: 'Allow'
-      Action:
-        - 's3:PutObject'
-      Resource:
-        Fn::Join:
-          - ''
-          - - 'arn:aws:s3:::'
-            - Ref: CarBucket
-            - '/*'
+  iam:
+    role:
+      statements:
+        - Effect: 'Allow'
+          Action:
+            - 's3:PutObject'
+          Resource:
+            Fn::Join:
+              - ''
+              - - 'arn:aws:s3:::'
+                - Ref: CarBucket
+                - '/*'
 package:
   exclude:
     - .env.local
