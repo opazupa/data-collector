@@ -14,7 +14,7 @@ const { carAPI } = Configuration;
 /**
  * Count Response
  */
-interface ICountResponse {
+export interface ICountResponse {
   total: number;
 }
 
@@ -84,7 +84,7 @@ const getCount = async ({ fromDate }: IGetCarsParams): Promise<number> => {
 /**
  * Auth response
  */
-interface IAuthResponse {
+export interface IAuthResponse {
   access_token: string;
   expires_in: number;
   token_type: string;
