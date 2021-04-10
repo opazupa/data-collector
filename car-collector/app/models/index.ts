@@ -21,7 +21,7 @@ export interface Car {
   gearType: string;
   country: string;
   region: string;
-  year: number;
+  manufacturingYear: number;
   modelTypeName: string;
   vin?: string;
   firstRegistrationMonth?: number;
@@ -59,7 +59,7 @@ export const toCar = (carAd: CarAd): Car => {
     gearType: carAd.gearType?.en,
     country: carAd.country?.en,
     region: carAd.region?.en,
-    year: carAd.year,
+    manufacturingYear: carAd.year,
     modelTypeName: carAd.modelTypeName,
     vin: carAd.vin,
     firstRegistrationMonth: carAd.firstRegistrationMonth,
