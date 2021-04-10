@@ -23,7 +23,7 @@ export const save = async (data: CarAd[], dateInfo: DateTime = DateTime.utc()) =
   // Write to json line
   fs.writeFileSync(TEMP_FILE, data.map((d) => JSON.stringify(toCar(d))).join('\n'), { flag: 'w' });
 
-  const partition = `year=${dateInfo.year}/month=${dateInfo.month}/week=${dateInfo.weekNumber}`;
+  const partition = `year=${dateInfo.year}/week=${dateInfo.weekNumber}`;
   const fileName = `${dateInfo.weekdayLong}.json.gz`;
   // Upload parameters
   const params = {
