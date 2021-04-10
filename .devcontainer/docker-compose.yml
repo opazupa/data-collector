@@ -1,0 +1,48 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VARIANT: 14
+    volumes:
+        - ..:/workspace:cached
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+    networks:
+      - car-collector-network
+
+  s3:
+    image: minio/minio:edge
+    ports:
+        - '9000:9000'
+    command: server /home/s3
+    networks:
+        - car-collector-network
+    environment:
+        - MINIO_ACCESS_KEY=test
+        - MINIO_SECRET_KEY=supersecret
+    volumes:
+        - ./data/s3:/home/s3/
+
+  car-collector-bucket:
+    image: minio/mc
+    depends_on:
+        - s3
+    networks:
+        - car-collector-network
+    entrypoint: >
+        /bin/sh -c "
+        until /usr/bin/mc config host add s3 http://s3:9000 test secret;
+        do echo 'Minio is unavailable - sleeping'; 
+        sleep 1; 
+        done;
+        /usr/bin/mc mb s3/test-cars;
+        /usr/bin/mc policy set download s3/test-cars;
+        exit 0;
+        "
+
+networks:
+    car-collector-network:

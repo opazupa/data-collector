@@ -2,13 +2,9 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.163.1/containers/typescript-node
 {
 	"name": "Dev environment",
-	"build": {
-		"dockerfile": "Dockerfile",
-		// Update 'VARIANT' to pick a Node version: 10, 12, 14
-		"args": { 
-			"VARIANT": "14"
-		}
-	},
+	"dockerComposeFile": ["docker-compose.yml", "../docker-compose.yml"],
+	"service": "app",
+	"workspaceFolder": "/workspace",
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
@@ -24,7 +20,8 @@
 		"amazonwebservices.aws-toolkit-vscode",
 		"kddejong.vscode-cfn-lint",
 		"rbbit.typescript-hero",
-		"oouo-diogo-perdigao.docthis"
+		"oouo-diogo-perdigao.docthis",
+		"editorconfig.editorconfig"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
