@@ -11,7 +11,11 @@ provider:
   stackTags:
     Owner: Olli Saarinen
     Project: car-collector-${opt:stage}
-
+  env:
+    AWS_S3_URL: !Join ['', ['https://', !GetAtt [CarBucket, DomainName]]]
+    AWS_S3_ACCESS_KEY: !Ref S3UserAccessKey
+    AWS_S3_ACCESS_SECRET: Fn::GetAtt: ["S3UserAccessKey", "SecretAccessKey"]
+    AWS_S3_CAR_BUCKET: !Ref CarBucket
   iamrolestatements:
     - Effect: 'Allow'
       Action:
@@ -22,6 +26,9 @@ provider:
           - - 'arn:aws:s3:::'
             - Ref: CarBucket
             - '/*'
+package:
+  exclude:
+    - .env.local
 
 functions:
   new-cars:
@@ -49,4 +56,26 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: !Sub ${opt:stage}-car-bucket
-  
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: True
+          IgnorePublicAcls: True
+          RestrictPublicBuckets: True
+    S3User:
+      Type: AWS::IAM::User
+      Properties:
+        Policies:
+          - PolicyName: bucket-access
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+              - Effect: Allow
+                Action:
+                - s3:*
+                Resource:
+                  - !Sub arn:aws:s3:::${CarBucket}
+                  - !Sub arn:aws:s3:::${CarBucket}/*
+    S3UserAccessKey:
+      Type: AWS::IAM::AccessKey
+      Properties:
+        UserName: !Ref S3User
+    

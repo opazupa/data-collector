@@ -53,21 +53,23 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '14.x'
+
       - name: Install Serverless Framework
         run: npm install -g serverless
+
       - name: Serverless AWS authentication
         run: sls config credentials --provider aws --key ${{ secrets.AWS_KEY }} --secret ${{ secrets.AWS_SECRET }}
+
       - name: Create env file
         run: |
           touch .env
           echo NETTIAUTO_API_SECRET=${{ secrets.NETTIAUTO_API_SECRET }} >> .env
           echo NETTIAUTO_API_USER=${{ secrets.NETTIAUTO_API_USER }} >> .env
-          echo AWS_S3_ACCESS_SECRET=${{ secrets.AWS_S3_ACCESS_SECRET }} >> .env
-          echo AWS_S3_ACCESS_KEY=${{ secrets.AWS_S3_ACCESS_KEY }} >> .env
           echo SENTRY_DSN=${{ secrets.SENTRY_DSN }} >> .env
-          echo SENTRY_ENV=prod >> .env
           cat .env
+
       - name: Install NPM dependencies
         run: npm install
-      - name: Deploy Lambda functions
+
+      - name: Deploy Application
         run: sls deploy --stage prod

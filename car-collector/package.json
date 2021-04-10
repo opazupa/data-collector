@@ -43,10 +43,9 @@
   },
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "local": "serverless offline",
-    "invoke": "serverless invoke local --function",
+    "local": "serverless offline --stage dev",
+    "invoke": "serverless invoke local --stage dev --function",
     "build": "serverless package --stage prod",
-    "deploy": "serverless deploy",
     "test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/**/*.test.ts --exit"
   }
 }
