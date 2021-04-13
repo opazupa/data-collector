@@ -1,8 +1,7 @@
 import { DateTime } from 'luxon';
 
 /**
- * Get yesterday date string
+ * Get today's date at midnight
  *
- *  @returns {string}
  */
-export const yesterday = (): DateTime => DateTime.utc().plus({ days: -1 }).set({ hour: 0, minute: 0, second: 0 });
+export const today = (): DateTime => DateTime.utc().set({ hour: 0, minute: 0, second: 0 });

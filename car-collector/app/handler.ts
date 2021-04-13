@@ -2,13 +2,13 @@ import { Handler } from 'aws-lambda';
 
 import { getCars } from './services/cars';
 import { save } from './services/storage';
-import { wrapHandler, yesterday } from './utils';
+import { today, wrapHandler } from './utils';
 
 /**
- * Save new cars from yesterday to S3 storage
+ * Save new cars from today to S3 storage
  */
 export const saveNewCars: Handler = wrapHandler(async () => {
-  const date = yesterday();
+  const date = today();
   const cars = await getCars({ fromDate: date });
 
   // Save if we have results

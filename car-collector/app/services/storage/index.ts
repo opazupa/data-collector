@@ -17,7 +17,10 @@ const s3 = new AWS.S3({
   s3BucketEndpoint: true,
 });
 
-export const save = async (data: CarAd[], dateInfo: DateTime = DateTime.utc()) => {
+/**
+ * Save CarAd infos to S3
+ */
+export const save = async (data: CarAd[], dateInfo: DateTime) => {
   // Partitions
   const partition = `year=${dateInfo.year}/week=${dateInfo.weekNumber}`;
   const fileName = `${dateInfo.weekdayLong}.json.gz`;
