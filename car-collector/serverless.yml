@@ -52,8 +52,10 @@ plugins:
   - serverless-offline
 
 resources:
+
   Conditions:
     IsProd: !Equals ["${opt:stage}", "prod"]
+
   Resources:
     CarBucket:
       Type: AWS::S3::Bucket
@@ -63,6 +65,7 @@ resources:
           BlockPublicAcls: True
           IgnorePublicAcls: True
           RestrictPublicBuckets: True
+
     S3User:
       Type: AWS::IAM::User
       Properties:
@@ -77,8 +80,76 @@ resources:
                 Resource:
                   - !Sub arn:aws:s3:::${CarBucket}
                   - !Sub arn:aws:s3:::${CarBucket}/*
+
     S3UserAccessKey:
       Type: AWS::IAM::AccessKey
       Properties:
         UserName: !Ref S3User
+
+    CarGlueDatabase:
+      Type: AWS::Glue::Database
+      Properties: 
+        CatalogId: !Ref AWS::AccountId
+        DatabaseInput: 
+            Description: Car Collector Database
+            Name: carcollector
+
+    CarGlueTable:
+      Type: AWS::Glue::Table
+      Properties: 
+        CatalogId: !Ref AWS::AccountId
+        DatabaseName: !Ref CarGlueDatabase
+        TableInput: 
+          Description: Cars from Nettiauto
+          Name: cars
+          TableType: EXTERNAL_TABLE
+          Parameters: { EXTERNAL: TRUE, has_encrypted_data: false, classification: json }
+          PartitionKeys: 
+            - Name: year
+              Type: int
+            - Name: week
+              Type: int
+          StorageDescriptor:
+              InputFormat: org.apache.hadoop.mapred.TextInputFormat
+              OutputFormat: org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat
+              SerdeInfo:
+                SerializationLibrary: org.openx.data.jsonserde.JsonSerDe
+                Parameters: { serialization.format: 1 }
+              Location: !Sub s3://${CarBucket}/
+              StoredAsSubDirectories: False
+              Columns: 
+                - Name: id
+                  Type: string
+                - Name: adurl
+                  Type: string
+                - Name: username
+                  Type: string
+                - Name: datecreated
+                  Type: timestamp
+                - Name: dateupdated
+                  Type: timestamp
+                - Name: vehicletype
+                  Type: string
+                - Name: bodytype
+                  Type: string
+                - Name: fueltype
+                  Type: string
+                - Name: geartype
+                  Type: string
+                - Name: region
+                  Type: string
+                - Name: manufacturingyear
+                  Type: int
+                - Name: firstregistrationyear
+                  Type: int
+                - Name: price
+                  Type: int
+                - Name: registernumber
+                  Type: string
+                - Name: consumptioncombined
+                  Type: double
+                - Name: enginesize
+                  Type: double
+                - Name: kilometers
+                  Type: bigint
     
