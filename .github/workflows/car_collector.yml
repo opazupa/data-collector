@@ -69,7 +69,7 @@ jobs:
           cat .env
 
       - name: Install deps
-        run: npm install
+        run: npm ci
 
       - name: Deploy serverless stack
         run: sls deploy --stage prod
