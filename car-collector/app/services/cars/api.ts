@@ -1,4 +1,5 @@
 import axios from 'axios';
+import axiosRetry from 'axios-retry';
 import { DateTime } from 'luxon';
 import qs from 'qs';
 
@@ -10,6 +11,9 @@ const BASE_CAR_API = 'rest/car';
 const BASE_CAR_QUERY = 'isPriced=true&vatDeduct=true&taxFree';
 const COUNT_API = `${BASE_CAR_API}/search-count`;
 const SEARCH_API = `${BASE_CAR_API}/search`;
+
+// Configure exponential back-off retry delay between requests
+axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
 const { carAPI } = Configuration;
 
