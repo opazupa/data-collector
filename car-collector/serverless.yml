@@ -41,6 +41,18 @@ functions:
           rate: cron(59 23 * * ? *)
           enabled: true
 
+  bulk-cars:
+    handler: app/handler.bulkImportCars
+    timeout: 800
+    events:
+      # Setup with disabled timer not to use APIGateway
+      - schedule:
+          rate: cron(0 0 1 1 ? 2019)
+          enabled: false
+          input:
+            from: ISO Date
+            to: ISO Date
+
 custom:
   # Local development
   serverless-offline:
@@ -51,6 +63,8 @@ plugins:
   - serverless-dotenv-plugin
   - serverless-offline
 
+
+# AWS cloudformation resources
 resources:
 
   Conditions:

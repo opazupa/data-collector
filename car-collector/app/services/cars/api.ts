@@ -25,16 +25,17 @@ export interface ICountResponse {
  */
 interface IGetCarsParams {
   fromDate: DateTime;
+  toDate?: DateTime;
 }
 
 /**
  * Get cars by params
  */
-export const getCars = async ({ fromDate }: IGetCarsParams): Promise<CarAd[]> => {
+export const getCars = async ({ fromDate, toDate }: IGetCarsParams): Promise<CarAd[]> => {
   // Handle API auth once
   await authenticate();
 
-  const count = await getCount({ fromDate });
+  const count = await getCount({ fromDate, toDate });
   const pages = Math.ceil(count / PAGE_SIZE);
   console.log(`${pages} pages of new cars (${count}) to be saved.`);
   if (!count) return [];
@@ -42,7 +43,7 @@ export const getCars = async ({ fromDate }: IGetCarsParams): Promise<CarAd[]> =>
   // Get cars from all pages in parallel
   const searchPromises = [];
   for (let page = 1; page <= pages; page++) {
-    searchPromises.push(searchCarAds({ page, fromDate }));
+    searchPromises.push(searchCarAds({ page, fromDate, toDate }));
   }
   const results = await Promise.all(searchPromises);
   return ([] as CarAd[]).concat(...results);
@@ -58,11 +59,13 @@ interface ISearchParams extends IGetCarsParams {
 /**
  * Search car ads
  */
-const searchCarAds = async ({ fromDate, page }: ISearchParams) => {
+const searchCarAds = async ({ fromDate, toDate, page }: ISearchParams) => {
   const carAds = await axios
     .get<CarAd[]>(
-      `${carAPI.url}/${SEARCH_API}?${BASE_CAR_QUERY}&page=${page}&rows=${PAGE_SIZE}&sortBy=dateCreated&sortOrder=asc${
-        fromDate ? '&dateCreatedFrom=' + fromDate.toISO() : ''
+      `${
+        carAPI.url
+      }/${SEARCH_API}?${BASE_CAR_QUERY}&page=${page}&rows=${PAGE_SIZE}&sortBy=dateCreated&sortOrder=asc&dateCreatedFrom=${fromDate.toISO()}${
+        toDate ? '&dateCreatedTo=' + toDate.toISO() : ''
       }`,
     )
     .then((x) => x.data);
@@ -73,9 +76,13 @@ const searchCarAds = async ({ fromDate, page }: ISearchParams) => {
 /**
  * Get count for the search results
  */
-const getCount = async ({ fromDate }: IGetCarsParams): Promise<number> => {
+const getCount = async ({ fromDate, toDate }: IGetCarsParams): Promise<number> => {
   return await axios
-    .get<ICountResponse>(`${carAPI.url}/${COUNT_API}?${BASE_CAR_QUERY}&dateCreatedFrom=${fromDate.toISO()}`)
+    .get<ICountResponse>(
+      `${carAPI.url}/${COUNT_API}?${BASE_CAR_QUERY}&dateCreatedFrom=${fromDate.toISO()}${
+        toDate ? '&dateCreatedTo=' + toDate.toISO() : ''
+      }`,
+    )
     .then((x) => x.data.total);
 };
 
