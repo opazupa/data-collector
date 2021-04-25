@@ -37,9 +37,6 @@ interface IGetCarsParams {
  * Get cars by params
  */
 export const getCars = async ({ fromDate, toDate, status = 'forsale' }: IGetCarsParams): Promise<CarAd[]> => {
-  // Handle API auth once
-  await authenticate();
-
   const count = await getCount({ fromDate, toDate, status });
   const pages = Math.ceil(count / PAGE_SIZE);
   console.log(`${pages} pages of ${status} cars (${count}) to be saved.`);
@@ -106,7 +103,7 @@ export interface IAuthResponse {
  * Authenticate to API
  *
  */
-const authenticate = async () => {
+export const authenticate = async () => {
   console.log('Authenticating');
   await axios
     .post<IAuthResponse>(

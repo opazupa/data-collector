@@ -19,6 +19,7 @@ describe('Car collector handler', () => {
     const storageMock = sinon.mock(storage);
 
     carMock.expects('getCars').twice().returns(CARS);
+    carMock.expects('authenticate').once();
     storageMock
       .expects('save')
       .once()
@@ -39,6 +40,7 @@ describe('Car collector handler', () => {
     const storageMock = sinon.mock(storage);
 
     carMock.expects('getCars').twice().returns([]);
+    carMock.expects('authenticate').once();
     storageMock.expects('save').never();
 
     await lambdaTester(saveNewCars)
@@ -62,6 +64,7 @@ describe('Car collector handler', () => {
       .expects('getCars')
       .exactly(2 * 5)
       .returns(CARS);
+    carMock.expects('authenticate').once();
     storageMock.expects('save').exactly(5);
 
     await lambdaTester(bulkImportCars)
@@ -82,6 +85,7 @@ describe('Car collector handler', () => {
     const storageMock = sinon.mock(storage);
 
     carMock.expects('getCars').never();
+    carMock.expects('authenticate').never();
     storageMock.expects('save').never();
 
     await lambdaTester(bulkImportCars)
@@ -103,6 +107,7 @@ describe('Car collector handler', () => {
     const storageMock = sinon.mock(storage);
 
     carMock.expects('getCars').never();
+    carMock.expects('authenticate').never();
     storageMock.expects('save').never();
 
     await lambdaTester(bulkImportCars)
@@ -121,6 +126,7 @@ describe('Car collector handler', () => {
     const storageMock = sinon.mock(storage);
 
     carMock.expects('getCars').never();
+    carMock.expects('authenticate').never();
     storageMock.expects('save').never();
 
     await lambdaTester(bulkImportCars)
@@ -139,6 +145,7 @@ describe('Car collector handler', () => {
     const storageMock = sinon.mock(storage);
 
     carMock.expects('getCars').never();
+    carMock.expects('authenticate').never();
     storageMock.expects('save').never();
 
     await lambdaTester(bulkImportCars)

@@ -1,7 +1,7 @@
 import { Handler } from 'aws-lambda';
 import { DateTime } from 'luxon';
 
-import { getCars } from './services/cars';
+import { authenticate, getCars } from './services/cars';
 import { save } from './services/storage';
 import { wrapHandler } from './utils';
 
@@ -11,12 +11,15 @@ import { wrapHandler } from './utils';
 export const saveNewCars: Handler = wrapHandler(async () => {
   const date = DateTime.utc().startOf('day');
 
+  // Handle API auth once
+  await authenticate();
+
   // New forsale and sold cars
-  const forsaleCars = await getCars({ fromDate: date, status: 'forsale' });
-  const soldCars = await getCars({ fromDate: date, status: 'sold' });
+  const allCars = (
+    await Promise.all([getCars({ fromDate: date, status: 'forsale' }), getCars({ fromDate: date, status: 'sold' })])
+  ).flat();
 
   // Save if we have results
-  const allCars = forsaleCars.concat(soldCars);
   if (allCars.length !== 0) await save(allCars, date);
 });
 
@@ -40,15 +43,22 @@ export const bulkImportCars: Handler<BulkParams> = wrapHandler(async (event) => 
 
   console.log(`Bulk import for cars triggered with ${days} days.`);
 
+  // Handle API auth once
+  await authenticate();
+
   // Handle every date in between
   for (let progress = 1; progress <= days; progress++) {
     console.log(`Progress: ${progress}/${days}. Getting cars for ${startDate.toISODate()}.`);
+
     // Forsale and sold cars
-    const forsaleCars = await getCars({ fromDate: startDate, toDate: startDate.endOf('day'), status: 'forsale' });
-    const soldCars = await getCars({ fromDate: startDate, toDate: startDate.endOf('day'), status: 'sold' });
+    const allCars = (
+      await Promise.all([
+        getCars({ fromDate: startDate, toDate: startDate.endOf('day'), status: 'forsale' }),
+        getCars({ fromDate: startDate, toDate: startDate.endOf('day'), status: 'sold' }),
+      ])
+    ).flat();
 
     // Save if we have results
-    const allCars = forsaleCars.concat(soldCars);
     if (allCars.length !== 0) await save(allCars, startDate);
     // Move to next date
     startDate = startDate.plus({ day: 1 });
