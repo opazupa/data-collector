@@ -21,8 +21,12 @@ export interface CarAd {
   dateUpdated: Date;
   lastModified: Date;
   vehicleType: CarOption;
-  make: CarOption;
-  model: CarOption;
+  make: {
+    name: string;
+  };
+  model: {
+    name: string;
+  };
   modelType?: CarOption;
   bodyType: CarOption;
   color: CarOption;

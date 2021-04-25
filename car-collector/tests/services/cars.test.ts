@@ -7,8 +7,8 @@ import { CarAd, getCars, IAuthResponse, ICountResponse } from '../../app/service
 
 const mock = new MockAdapter(axios);
 
-const TESLA = { model: { en: 'Tesla' }, price: 100000, registerNumber: 'XXX-345' };
-const OPEL = { model: { en: 'Opel' }, price: 4000, registerNumber: 'OPO-341' };
+const TESLA = { model: { name: 'Tesla' }, price: 100000, registerNumber: 'XXX-345' };
+const OPEL = { model: { name: 'Opel' }, price: 4000, registerNumber: 'OPO-341' };
 
 describe('Car api service', () => {
   beforeEach(() => {
