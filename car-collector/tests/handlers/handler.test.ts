@@ -18,8 +18,11 @@ describe('Car collector handler', () => {
     const carMock = sinon.mock(carAPI);
     const storageMock = sinon.mock(storage);
 
-    carMock.expects('getCars').once().returns(CARS);
-    storageMock.expects('save').once().withArgs(CARS);
+    carMock.expects('getCars').twice().returns(CARS);
+    storageMock
+      .expects('save')
+      .once()
+      .withArgs([...CARS, ...CARS]);
 
     await lambdaTester(saveNewCars)
       .event({})
@@ -35,7 +38,7 @@ describe('Car collector handler', () => {
     const carMock = sinon.mock(carAPI);
     const storageMock = sinon.mock(storage);
 
-    carMock.expects('getCars').once().returns([]);
+    carMock.expects('getCars').twice().returns([]);
     storageMock.expects('save').never();
 
     await lambdaTester(saveNewCars)
@@ -55,7 +58,10 @@ describe('Car collector handler', () => {
     const carMock = sinon.mock(carAPI);
     const storageMock = sinon.mock(storage);
 
-    carMock.expects('getCars').exactly(5).returns(CARS);
+    carMock
+      .expects('getCars')
+      .exactly(2 * 5)
+      .returns(CARS);
     storageMock.expects('save').exactly(5);
 
     await lambdaTester(bulkImportCars)

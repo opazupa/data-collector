@@ -10,10 +10,14 @@ import { wrapHandler } from './utils';
  */
 export const saveNewCars: Handler = wrapHandler(async () => {
   const date = DateTime.utc().startOf('day');
-  const cars = await getCars({ fromDate: date });
+
+  // New forsale and sold cars
+  const forsaleCars = await getCars({ fromDate: date, status: 'forsale' });
+  const soldCars = await getCars({ fromDate: date, status: 'sold' });
 
   // Save if we have results
-  if (cars.length !== 0) await save(cars, date);
+  const allCars = forsaleCars.concat(soldCars);
+  if (allCars.length !== 0) await save(allCars, date);
 });
 
 // Bulk operation paramaters
@@ -39,9 +43,13 @@ export const bulkImportCars: Handler<BulkParams> = wrapHandler(async (event) => 
   // Handle every date in between
   for (let progress = 1; progress <= days; progress++) {
     console.log(`Progress: ${progress}/${days}. Getting cars for ${startDate.toISODate()}.`);
-    const cars = await getCars({ fromDate: startDate, toDate: startDate.endOf('day') });
+    // Forsale and sold cars
+    const forsaleCars = await getCars({ fromDate: startDate, toDate: startDate.endOf('day'), status: 'forsale' });
+    const soldCars = await getCars({ fromDate: startDate, toDate: startDate.endOf('day'), status: 'sold' });
+
     // Save if we have results
-    if (cars.length !== 0) await save(cars, startDate);
+    const allCars = forsaleCars.concat(soldCars);
+    if (allCars.length !== 0) await save(allCars, startDate);
     // Move to next date
     startDate = startDate.plus({ day: 1 });
   }
