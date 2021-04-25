@@ -161,7 +161,7 @@ resources:
                 - Name: firstregistrationyear
                   Type: int
                 - Name: price
-                  Type: int
+                  Type: double
                 - Name: registernumber
                   Type: string
                 - Name: consumptioncombined
