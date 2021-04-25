@@ -142,6 +142,10 @@ resources:
                   Type: timestamp
                 - Name: dateupdated
                   Type: timestamp
+                - Name: make
+                  Type: string
+                - Name: model
+                  Type: string
                 - Name: vehicletype
                   Type: string
                 - Name: bodytype
